@@ -1080,15 +1080,16 @@ excluded(X) :-
                mediterranean, pacific, persian_gulf, red_sea, southern_ocean ]).
 
 %/*
- route(Goal, So_Far,  Limit, _  ) :-
-    writeln(route( Goal, So_Far, Limit )),
-    fail.
+route( Route,  Limit, _  ) :-
+  writeln(route( Route, Limit )),
+  fail.
 %*/
 
-route(Goal, [X | So_Far], _, [Goal, X | So_Far] ) :-
+route([Goal, X | So_Far], _, [Goal, X | So_Far] ) :-
   borders_X( Goal, X ).
 
-route( Goal, [X | So_Far], Limit, R  ) :-
-  length([X | So_Far], L),  L < Limit,
+route( [Goal, X | So_Far], Limit, R  ) :-
+  % Use < since we are adding one.
+  length([Goal, X | So_Far], L),  L < Limit,
   borders_X( Z, X ), Z \= Goal, \+ member(Z, So_Far), \+ excluded(Z),
-  route( Goal, [Z, X | So_Far], Limit, R ).
+  route( [Goal, Z, X | So_Far], Limit, R ).
